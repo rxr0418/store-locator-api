@@ -13,33 +13,6 @@ auth_bp = Blueprint("auth", __name__)
 
 @auth_bp.route("/login", methods=["POST"])
 def login():
-    """
-    Login with email/password. Returns access token + refresh token.
-    ---
-    tags:
-      - Authentication
-    parameters:
-      - in: body
-        name: body
-        required: true
-        schema:
-          type: object
-          required: [email, password]
-          properties:
-            email:
-              type: string
-              example: admin@test.com
-            password:
-              type: string
-              example: AdminTest123!
-    responses:
-      200:
-        description: Login successful
-      400:
-        description: Missing fields
-      401:
-        description: Invalid credentials
-    """
     data = request.get_json(silent=True)
     if not data:
         return jsonify({"error": "Bad Request", "message": "JSON body required"}), 400

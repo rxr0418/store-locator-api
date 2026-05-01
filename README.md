@@ -11,7 +11,7 @@ Production-ready REST API for multi-location retail store search and management.
 | Auth | JWT (PyJWT) + bcrypt | Two-token pattern (access 15min / refresh 7d) |
 | Distance | Bounding Box + Haversine (geopy) | Required by spec |
 | CSV Processing | Python built-in `csv` module | No pandas dependency needed |
-| Caching | In-memory (Redis-ready) | Geocoding TTL 30 days |
+| Caching | In-memory  | Geocoding TTL 30 days |
 | Rate Limiting | Flask-Limiter | 100/hour, 10/minute per IP |
 | API Docs | Flasgger (Swagger UI) | Auto-generated at `/docs/` |
 
@@ -50,7 +50,7 @@ python run.py           # → http://localhost:5000
 # Health check: http://localhost:5000/health
 ```
 
-### Test credentials (created by seed.py)
+### Test credentials 
 | Role | Email | Password |
 |------|-------|----------|
 | Admin | admin@test.com | AdminTest123! |
@@ -68,7 +68,7 @@ TEST_DATABASE_URL=postgresql://postgres:postgres@localhost:5432/store_locator_te
 
 ---
 
-## Deployment (Railway — Recommended)
+## Deployment 
 
 Railway provides free PostgreSQL + Python hosting. Deployment takes about 5 minutes.
 
@@ -122,7 +122,7 @@ GET https://your-app.railway.app/health
 
 ---
 
-## Deployment (Render — Alternative)
+## Deployment 
 
 A `render.yaml` is included. Just connect your GitHub repo on [render.com](https://render.com) and it will auto-configure the web service + PostgreSQL database.
 

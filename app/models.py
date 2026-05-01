@@ -7,7 +7,6 @@ def utcnow():
     return datetime.now(timezone.utc).replace(tzinfo=None)
 
 
-# ─── Junction table: store ↔ services ─────────────────────────────────────────
 store_services = db.Table(
     "store_services",
     db.Column("store_id", db.String(10), db.ForeignKey("stores.store_id"), primary_key=True),
@@ -41,7 +40,6 @@ class Store(db.Model):
 
     phone = db.Column(db.String(20), nullable=True)
 
-    # Operating hours stored as JSON-like strings per day
     hours_mon = db.Column(db.String(20), nullable=True)
     hours_tue = db.Column(db.String(20), nullable=True)
     hours_wed = db.Column(db.String(20), nullable=True)
@@ -53,7 +51,7 @@ class Store(db.Model):
     created_at = db.Column(db.DateTime, default=utcnow)
     updated_at = db.Column(db.DateTime, default=utcnow, onupdate=utcnow)
 
-    # Many-to-many relationship with services
+ 
     services = db.relationship(
         "StoreService",
         back_populates="store",
@@ -123,7 +121,7 @@ class StoreService(db.Model):
     )
 
 
-# ─── Role / Permission / User ──────────────────────────────────────────────────
+# ─── Role / Permission / User 
 
 role_permissions = db.Table(
     "role_permissions",

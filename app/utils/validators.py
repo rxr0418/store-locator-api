@@ -2,7 +2,7 @@
 Input validation helpers shared across routes.
 """
 import re
-from typing import Optional, Tuple
+
 
 PHONE_RE = re.compile(r"^\d{3}-\d{3}-\d{4}$")
 STORE_ID_RE = re.compile(r"^S\d{4}$")

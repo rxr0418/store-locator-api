@@ -48,8 +48,7 @@ def _apply_hours(store: Store, hours: dict):
             setattr(store, col, hours[day] if hours[day] else None)
 
 
-# ─── POST /api/admin/stores/import  (MUST be before /<store_id>) ──────────────
-
+# ─── POST /api/admin/stores/import 
 @stores_admin_bp.route("/import", methods=["POST"])
 @require_role("admin", "marketer")
 def import_stores():
@@ -81,8 +80,7 @@ def import_stores():
     return jsonify({"message": "Import complete", "report": report}), status_code
 
 
-# ─── POST /api/admin/stores ────────────────────────────────────────────────────
-
+# ─── POST /api/admin/stores 
 @stores_admin_bp.route("", methods=["POST"])
 @require_role("admin", "marketer")
 def create_store():
@@ -155,8 +153,7 @@ def create_store():
     return jsonify({"message": "Store created", "store": store.to_dict()}), 201
 
 
-# ─── GET /api/admin/stores ─────────────────────────────────────────────────────
-
+# ─── GET /api/admin/stores 
 @stores_admin_bp.route("", methods=["GET"])
 @require_auth
 def list_stores():
@@ -207,7 +204,7 @@ def list_stores():
     }), 200
 
 
-# ─── GET /api/admin/stores/<store_id> ─────────────────────────────────────────
+# ─── GET /api/admin/stores/<store_id> 
 
 @stores_admin_bp.route("/<store_id>", methods=["GET"])
 @require_auth
@@ -219,7 +216,7 @@ def get_store(store_id):
     return jsonify({"store": store.to_dict()}), 200
 
 
-# ─── PATCH /api/admin/stores/<store_id> ───────────────────────────────────────
+# ─── PATCH /api/admin/stores/<store_id>
 
 @stores_admin_bp.route("/<store_id>", methods=["PATCH"])
 @require_role("admin", "marketer")
@@ -267,7 +264,7 @@ def update_store(store_id):
     return jsonify({"message": "Store updated", "store": store.to_dict()}), 200
 
 
-# ─── DELETE /api/admin/stores/<store_id> ──────────────────────────────────────
+# ─── DELETE /api/admin/stores/<store_id> 
 
 @stores_admin_bp.route("/<store_id>", methods=["DELETE"])
 @require_role("admin", "marketer")

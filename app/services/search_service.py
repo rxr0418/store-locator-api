@@ -34,10 +34,8 @@ def search_stores(
     radius_miles = min(float(radius_miles), 100.0)
     radius_miles = max(float(radius_miles), 0.1)
 
-    # Step 1: Bounding box
     min_lat, max_lat, min_lon, max_lon = calculate_bounding_box(lat, lon, radius_miles)
 
-    # Step 2: SQL filter - only active stores within bounding box
     query = Store.query.filter(
         Store.status == "active",
         Store.latitude.between(min_lat, max_lat),
@@ -50,7 +48,7 @@ def search_stores(
         if valid_types:
             query = query.filter(Store.store_type.in_(valid_types))
 
-    # Filter by services (AND logic) - store must have ALL listed services
+    # Filter by services (AND logic)
     if services:
         valid_svcs = [s for s in services if s in VALID_SERVICES]
         for svc in valid_svcs:
@@ -61,7 +59,7 @@ def search_stores(
 
     candidate_stores = query.all()
 
-    # Step 3: Haversine exact distance
+
     results = []
     for store in candidate_stores:
         dist = geodesic(
@@ -79,7 +77,7 @@ def search_stores(
             d["is_open_now"] = store_open
             results.append(d)
 
-    # Step 4: Sort by distance
+
     results.sort(key=lambda x: x["distance_miles"])
     results = results[:limit]
 

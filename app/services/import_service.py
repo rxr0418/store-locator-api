@@ -170,7 +170,6 @@ def process_csv_import(file_bytes: bytes) -> dict:
             lat = float(row["latitude"].strip())
             lon = float(row["longitude"].strip())
 
-            # Auto-geocode if coords are 0,0 (missing)
             if lat == 0.0 and lon == 0.0:
                 address = f"{row['address_street']}, {row['address_city']}, {row['address_state']} {row['address_postal_code']}"
                 result = geocode_address(address)
@@ -185,7 +184,6 @@ def process_csv_import(file_bytes: bytes) -> dict:
             existing = db.session.get(Store, sid)
 
             if existing:
-                # UPDATE
                 existing.name = row["name"].strip()
                 existing.store_type = row["store_type"].strip().lower()
                 existing.status = row["status"].strip().lower()
@@ -200,7 +198,6 @@ def process_csv_import(file_bytes: bytes) -> dict:
                 for day in DAY_FIELDS:
                     setattr(existing, day, row.get(day, "").strip() or None)
 
-                # Rebuild services
                 StoreService.query.filter_by(store_id=sid).delete()
                 for svc in services_list:
                     if svc in VALID_SERVICES:
@@ -208,7 +205,6 @@ def process_csv_import(file_bytes: bytes) -> dict:
 
                 report["updated"] += 1
             else:
-                # CREATE
                 store = Store(
                     store_id=sid,
                     name=row["name"].strip(),
@@ -241,7 +237,6 @@ def process_csv_import(file_bytes: bytes) -> dict:
         db.session.rollback()
         logger.exception("CSV import transaction failed")
         report["errors"].append(f"Database error: {str(e)}")
-        # Recalculate counts
         report["failed"] = report["total_rows"]
         report["created"] = 0
         report["updated"] = 0

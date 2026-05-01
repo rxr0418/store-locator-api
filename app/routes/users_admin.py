@@ -1,8 +1,8 @@
 from flask import Blueprint, request, jsonify, g
 from app import db
 from app.models import User, Role, RefreshToken
-from app.middleware.auth import require_role, require_auth, hash_password
-from app.utils.validators import validate_create_user, EMAIL_RE
+from app.middleware.auth import require_role, hash_password
+from app.utils.validators import validate_create_user
 
 users_admin_bp = Blueprint("users_admin", __name__)
 
@@ -16,7 +16,7 @@ def _next_user_id() -> str:
     return f"U{count + 1:03d}"
 
 
-# ─── POST /api/admin/users ─────────────────────────────────────────────────────
+# ─── POST /api/admin/users 
 
 @users_admin_bp.route("", methods=["POST"])
 @require_role("admin")
@@ -62,7 +62,7 @@ def create_user():
     return jsonify({"message": "User created", "user": user.to_dict()}), 201
 
 
-# ─── GET /api/admin/users ──────────────────────────────────────────────────────
+# ─── GET /api/admin/users 
 
 @users_admin_bp.route("", methods=["GET"])
 @require_role("admin")
@@ -115,7 +115,7 @@ def get_user(user_id):
     return jsonify({"user": user.to_dict()}), 200
 
 
-# ─── PUT /api/admin/users/<user_id> ───────────────────────────────────────────
+# ─── PUT /api/admin/users/<user_id>
 
 @users_admin_bp.route("/<user_id>", methods=["PUT"])
 @require_role("admin")
@@ -186,7 +186,7 @@ def update_user(user_id):
     return jsonify({"message": "User updated", "user": user.to_dict()}), 200
 
 
-# ─── DELETE /api/admin/users/<user_id> ────────────────────────────────────────
+# ─── DELETE /api/admin/users/<user_id> 
 
 @users_admin_bp.route("/<user_id>", methods=["DELETE"])
 @require_role("admin")

@@ -56,57 +56,6 @@ def _get_search_params(data: dict) -> tuple:
 @limiter.limit("100 per hour")
 @limiter.limit("10 per minute")
 def search():
-    """
-    Search for stores by coordinates, address, or postal code.
-    ---
-    tags:
-      - Store Search (Public)
-    parameters:
-      - in: body
-        name: body
-        required: true
-        schema:
-          type: object
-          properties:
-            latitude:
-              type: number
-              example: 42.3601
-            longitude:
-              type: number
-              example: -71.0589
-            address:
-              type: string
-              example: "123 Main Street, Boston, MA"
-            postal_code:
-              type: string
-              example: "02101"
-            radius_miles:
-              type: number
-              default: 10
-              example: 15
-            services:
-              type: array
-              items:
-                type: string
-              example: ["pharmacy", "pickup"]
-            store_types:
-              type: array
-              items:
-                type: string
-              example: ["flagship", "regular"]
-            open_now:
-              type: boolean
-              default: false
-    responses:
-      200:
-        description: Search results
-      400:
-        description: Invalid input
-      422:
-        description: Geocoding failed
-      429:
-        description: Rate limit exceeded
-    """
     data = request.get_json(silent=True)
     if not data:
         return jsonify({"error": "Bad Request", "message": "JSON body required"}), 400
@@ -115,8 +64,6 @@ def search():
     lon = data.get("longitude")
     address = data.get("address", "").strip()
     postal_code = data.get("postal_code", "").strip()
-
-    # Determine search origin
     search_input_type = None
     geocode_query = None
 

@@ -14,19 +14,19 @@ limiter = Limiter(key_func=get_remote_address)
 def create_app(config=None):
     app = Flask(__name__)
 
-    # Load config
+
     if config is None:
         from config import get_config
         app.config.from_object(get_config())
     else:
         app.config.from_object(config)
 
-    # Init extensions
+
     db.init_app(app)
     migrate.init_app(app, db)
     limiter.init_app(app)
 
-    # Swagger docs
+    
     swagger_config = {
         "headers": [],
         "specs": [
@@ -43,7 +43,7 @@ def create_app(config=None):
     }
     Swagger(app, config=swagger_config)
 
-    # Register blueprints
+
     from app.routes.auth import auth_bp
     from app.routes.stores_public import stores_public_bp
     from app.routes.stores_admin import stores_admin_bp
@@ -56,10 +56,10 @@ def create_app(config=None):
     app.register_blueprint(users_admin_bp, url_prefix="/api/admin/users")
     app.register_blueprint(health_bp)
 
-    # Global error handlers
+
     register_error_handlers(app)
 
-    # Logging
+  
     logging.basicConfig(level=logging.INFO)
 
     return app

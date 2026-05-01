@@ -87,7 +87,7 @@ def geocode_postal_code(postal_code: str, ttl: int = 60 * 60 * 24 * 30) -> Optio
     return None
 
 
-# ─── Bounding box ──────────────────────────────────────────────────────────────
+# ─── Bounding box 
 
 def calculate_bounding_box(lat: float, lon: float, radius_miles: float):
     """
@@ -104,8 +104,7 @@ def calculate_bounding_box(lat: float, lon: float, radius_miles: float):
     )
 
 
-# ─── Hours parsing ─────────────────────────────────────────────────────────────
-
+# ─── Hours parsing 
 HOURS_RE = re.compile(r"^(\d{2}):(\d{2})-(\d{2}):(\d{2})$")
 DAY_MAP = {0: "mon", 1: "tue", 2: "wed", 3: "thu", 4: "fri", 5: "sat", 6: "sun"}
 

@@ -187,7 +187,7 @@ if __name__ == "__main__":
     seed_permissions_and_roles(app)
     seed_users(app)
 
-    # Seed from 50-store CSV
+ 
     csv_path = os.path.join(os.path.dirname(__file__), "stores_50.csv")
     if os.path.exists(csv_path):
         seed_stores_from_csv(app, csv_path)
