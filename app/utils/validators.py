@@ -2,7 +2,7 @@
 Input validation helpers shared across routes.
 """
 import re
-
+from typing import Optional, Tuple
 
 PHONE_RE = re.compile(r"^\d{3}-\d{3}-\d{4}$")
 STORE_ID_RE = re.compile(r"^S\d{4}$")
@@ -29,8 +29,11 @@ def validate_hours_value(v: str) -> bool:
     m = HOURS_RE.match(s)
     if not m:
         return False
-    open_m = int(m.group(1)) * 60 + int(m.group(2))
-    close_m = int(m.group(3)) * 60 + int(m.group(4))
+    h1, min1, h2, min2 = int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4))
+    if h1 > 23 or min1 > 59 or h2 > 23 or min2 > 59:
+        return False
+    open_m = h1 * 60 + min1
+    close_m = h2 * 60 + min2
     return open_m < close_m
 
 

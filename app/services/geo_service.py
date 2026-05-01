@@ -12,7 +12,7 @@ from typing import Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
-# Simple in-memory cache: { key: (lat, lon, timestamp) }
+# Simple in-memory cache: 
 _geocode_cache: dict = {}
 
 
@@ -87,7 +87,7 @@ def geocode_postal_code(postal_code: str, ttl: int = 60 * 60 * 24 * 30) -> Optio
     return None
 
 
-# ─── Bounding box 
+# ─── Bounding box ──────────────────────────────────────────────────────────────
 
 def calculate_bounding_box(lat: float, lon: float, radius_miles: float):
     """
@@ -104,7 +104,8 @@ def calculate_bounding_box(lat: float, lon: float, radius_miles: float):
     )
 
 
-# ─── Hours parsing 
+# ─── Hours parsing ─────────────────────────────────────────────────────────────
+
 HOURS_RE = re.compile(r"^(\d{2}):(\d{2})-(\d{2}):(\d{2})$")
 DAY_MAP = {0: "mon", 1: "tue", 2: "wed", 3: "thu", 4: "fri", 5: "sat", 6: "sun"}
 
@@ -119,8 +120,11 @@ def parse_hours(hours_str: str) -> Optional[Tuple[int, int]]:
     m = HOURS_RE.match(hours_str.strip())
     if not m:
         return None
-    open_m = int(m.group(1)) * 60 + int(m.group(2))
-    close_m = int(m.group(3)) * 60 + int(m.group(4))
+    h1, min1, h2, min2 = int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4))
+    if h1 > 23 or min1 > 59 or h2 > 23 or min2 > 59:
+        return None
+    open_m = h1 * 60 + min1
+    close_m = h2 * 60 + min2
     if open_m >= close_m:
         return None
     return open_m, close_m

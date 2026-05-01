@@ -48,7 +48,8 @@ def _apply_hours(store: Store, hours: dict):
             setattr(store, col, hours[day] if hours[day] else None)
 
 
-# ─── POST /api/admin/stores/import 
+# ─── POST /api/admin/stores/import  (MUST be before /<store_id>) 
+
 @stores_admin_bp.route("/import", methods=["POST"])
 @require_role("admin", "marketer")
 def import_stores():
@@ -70,6 +71,10 @@ def import_stores():
 
     report = process_csv_import(file_bytes)
 
+    # Header validation failure
+    if report["total_rows"] == 0 and report.get("errors"):
+        return jsonify({"error": "Bad Request", "message": report["errors"][0]}), 400
+
     if report["failed"] > 0 and report["failed"] == report["total_rows"]:
         status_code = 422
     elif report["failed"] > 0:
@@ -81,6 +86,7 @@ def import_stores():
 
 
 # ─── POST /api/admin/stores 
+
 @stores_admin_bp.route("", methods=["POST"])
 @require_role("admin", "marketer")
 def create_store():
@@ -154,6 +160,7 @@ def create_store():
 
 
 # ─── GET /api/admin/stores 
+
 @stores_admin_bp.route("", methods=["GET"])
 @require_auth
 def list_stores():
@@ -216,7 +223,7 @@ def get_store(store_id):
     return jsonify({"store": store.to_dict()}), 200
 
 
-# ─── PATCH /api/admin/stores/<store_id>
+# ─── PATCH /api/admin/stores/<store_id> 
 
 @stores_admin_bp.route("/<store_id>", methods=["PATCH"])
 @require_role("admin", "marketer")
